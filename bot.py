@@ -5,7 +5,7 @@ import cv2 as cv
 import numpy as np
 import pyautogui
 import PIL
-
+# 
 import matplotlib.pyplot as plt
 from pyzbar import pyzbar as zbar
 from pprint import pprint as pp
@@ -22,11 +22,14 @@ screenshot_clip_height = 768
 
 image = None
 image_rotated = None
+RTSP_url = 'rtsp://operator:operator@192.168.0.90:554/axis-media/media.amp'
+cap = cv.VideoCapture(RTSP_url)
 try:
     while(True):
         os.system(screenshot_cmd)
         image = cv.imread('./test.png')
         image = image[:screenshot_clip_height, :screenshot_clip_width]
+        # ret, frame = cap.read()
         # image_norm = cv.normalize(image, None, alpha=0, beta=1, norm_type=cv.NORM_MINMAX, dtype=cv.CV_32F)
         image_norm = image
         found = False
