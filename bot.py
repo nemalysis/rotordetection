@@ -29,7 +29,7 @@ cap = cv.VideoCapture(RTSP_url)
 try:
     while(True):
         ret, image = cap.read()
-        image = image[:screenshot_clip_height, :screenshot_clip_width]
+        # image = image[:screenshot_clip_height, :screenshot_clip_width]
         # image_norm = cv.normalize(image, None, alpha=0, beta=1, norm_type=cv.NORM_MINMAX, dtype=cv.CV_32F)
         image_norm = image
         found = False
