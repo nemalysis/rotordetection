@@ -23,7 +23,6 @@ batch_shape = config["layers"][0]["config"]["batch_input_shape"]
 target_height = batch_shape[1]
 target_width = batch_shape[2]
 
-
 class_names = ['DL1','DL2','DL3','DL_BG']
 
 # input_folder = r'D:\Dokumente\Uni\Signalverarbeitung\Project\data\SignalVerarb_videos\baseline\frames\drinnen_1280x720_50fps'

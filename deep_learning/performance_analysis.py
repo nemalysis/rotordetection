@@ -6,7 +6,6 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 def get_conditions_names2keys():
-
     conditions_names2keys = {}
     conditions_names2keys['baseline'] = 'indoor'
     conditions_names2keys['daemmerung_leicht'] = 'dusk'
@@ -19,9 +18,9 @@ def get_conditions_names2keys():
 
     return conditions_names2keys
 
-def compute_accuracy(model,test_dir,img_size):
-    test_results = {}
 
+def compute_accuracy(model,test_dir,img_size,conditions_names2keys):
+    test_results = {}
     for test_condition in os.listdir(test_dir):
         test_set_dir = os.path.join(test_dir,test_condition)
         print(test_condition)
@@ -36,7 +35,6 @@ def compute_accuracy(model,test_dir,img_size):
         curr_test_results = model.evaluate(test_generator)
         test_results[test_condition] = curr_test_results
 
-    conditions_names2keys = get_conditions_names2keys()
     n_cond = len(conditions_names2keys)
     acc_DL = [0 for i in range(n_cond)]
     label = ['' for i in range(n_cond)]
@@ -48,7 +46,7 @@ def compute_accuracy(model,test_dir,img_size):
     return acc_DL,label
 
 
-def plot_accuracy(acc_DL,label):
+def plot_accuracy(acc_DL,label,conditions_names2keys):
     n_cond = len(conditions_names2keys)
     # mpl.rcdefaults()
     plt.rcParams.update({'font.size': 14})
@@ -96,34 +94,39 @@ def compute_conf_mats(model,test_dir,img_size,batch_size):
     return confusion_mats
 
 
+def plot_confusion_mats(confusion_mats,conditions_names2keys):
+    plt.figure(figsize=(14,14))
+    for i,cond in enumerate(conditions_names2keys.keys()):
+        plt.subplot(3,3,i+1)
+        
+        sn.heatmap(confusion_mats[cond], annot=True,square=True,xticklabels=['DL1','DL2','DL3','DL_BG'],yticklabels=['DL1','DL2','DL3','DL_BG'],cbar_kws={"shrink":0.8})
+        plt.ylabel('ground truth')
+        plt.xlabel('prediction')
+        plt.title(conditions_names2keys[cond])
 
-batch_size = 5
-img_height = 360
-img_width = 640
-
-model_dir = r'.\deep_learning\model\rotordet_net_v4'
-model_name = os.path.basename(model_dir)
-model = tf.keras.models.load_model(model_dir)
-
-
-test_datagen = ImageDataGenerator()
-test_dir = r'.\deep_learning\data\test'
-img_size = (img_height, img_width)
-
-conditions_names2keys = get_conditions_names2keys()
-
-acc_DL,label = compute_accuracy(model,test_dir,img_size)
-plot_accuracy(acc_DL,label)
+    plt.savefig(r'.\deep_learning\analysis_results\confusion_mat\confusion_mat.pdf',bbox_inches='tight')
 
 
-confusion_mats = compute_conf_mats(model,test_dir,img_size,batch_size)
-plt.figure(figsize=(14,14))
-for i,cond in enumerate(conditions_names2keys.keys()):
-    plt.subplot(3,3,i+1)
-    
-    sn.heatmap(confusion_mats[cond], annot=True,square=True,xticklabels=['DL1','DL2','DL3','DL_BG'],yticklabels=['DL1','DL2','DL3','DL_BG'],cbar_kws={"shrink":0.8})
-    plt.ylabel('ground truth')
-    plt.xlabel('prediction')
-    plt.title(conditions_names2keys[cond])
+if __name__ == "main":
 
-plt.savefig(r'.\deep_learning\analysis_results\confusion_mat\confusion_mat.pdf',bbox_inches='tight')
+    batch_size = 5
+    img_height = 360
+    img_width = 640
+
+    model_dir = r'.\deep_learning\model\rotordet_net_v4'
+    model_name = os.path.basename(model_dir)
+    model = tf.keras.models.load_model(model_dir)
+
+    test_datagen = ImageDataGenerator()
+    test_dir = r'.\deep_learning\data\test'
+    img_size = (img_height, img_width)
+
+
+    conditions_names2keys = get_conditions_names2keys()
+
+    acc_DL,label = compute_accuracy(model,test_dir,img_size,conditions_names2keys)
+    plot_accuracy(acc_DL,label,conditions_names2keys)
+
+    confusion_mats = compute_conf_mats(model,test_dir,img_size,batch_size)
+    plot_confusion_mats(confusion_mats,conditions_names2keys)
+
