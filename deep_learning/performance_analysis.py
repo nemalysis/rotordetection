@@ -6,15 +6,16 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 def get_conditions_names2keys():
-    conditions_names2keys = {}
-    conditions_names2keys['baseline'] = 'indoor'
-    conditions_names2keys['daemmerung_leicht'] = 'dusk'
-    conditions_names2keys['daemmerung_stark'] = 'dark'
-    conditions_names2keys['IR'] = 'IR'
-    conditions_names2keys['low_res'] = 'lowres'
-    conditions_names2keys['regen'] = 'rain'
-    conditions_names2keys['schatten'] = 'shadow'
-    conditions_names2keys['winkel'] = 'angle'
+    conditions_names2keys = {
+        'baseline': 'indoor',
+        'daemmerung_leicht': 'dusk',
+        'daemmerung_stark': 'dark',
+        'IR': 'IR',
+        'low_res': 'lowres',
+        'regen': 'rain',
+        'schatten': 'shadow',
+        'winkel': 'angle',
+    }
 
     return conditions_names2keys
 
