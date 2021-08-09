@@ -5,6 +5,7 @@ import os
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+
 def get_conditions_names2keys():
     conditions_names2keys = {
         'baseline': 'indoor',
