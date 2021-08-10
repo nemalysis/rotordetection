@@ -1,0 +1,9 @@
+mss==6.1.0
+seaborn==0.11.1
+numpy==1.19.5
+opencv_python==4.5.2.52
+matplotlib==3.4.1
+pandas==1.2.4
+tensorflow==2.5.0rc1
+Pillow==8.3.1
+scikit_learn==0.24.2

@@ -2,12 +2,7 @@ from tensorflow.keras.applications import *
 from tensorflow.keras import models
 from tensorflow.keras import layers
 import pathlib
-import os
-import shutil
-import pandas as pd
 from random import randrange
-from tensorflow.keras import optimizers
-from sklearn import model_selection
 import tensorflow as tf
 import numpy as np
 
@@ -27,8 +22,8 @@ seed = randrange(1000)
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
   train_dir,
   validation_split = 0.6, # only use 60% of the training data (for memory reasons)
+  subset = 'validation', # set subset to 'validation' to use percentage specified in validation_split. Else 1-validation_split is used.
   label_mode = 'categorical',
-  subset = 'validation',
   seed = seed,
   smart_resize = True,
   image_size=(img_height, img_width),
@@ -37,8 +32,8 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
 test_ds = tf.keras.preprocessing.image_dataset_from_directory(
   test_dir,
   validation_split = 0.2, # use 20% of the test set for validation
-  label_mode = 'categorical',
   subset = 'validation',
+  label_mode = 'categorical',
   seed = seed,
   smart_resize = True,
   image_size=(img_height, img_width),
