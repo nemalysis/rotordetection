@@ -1,12 +1,10 @@
 
 import os
 import cv2 as cv
-import pyautogui
 import PIL
 import matplotlib.pyplot as plt
 from pyzbar import pyzbar as zbar
 from pprint import pprint as pp
-#os.system('xrandr --query')
 import time
 
 
@@ -29,8 +27,3 @@ if __name__ == '__main__':
     for i in range(0, 90, 10):
         plt.imshow(get_rotation(image, i))
         plt.show()
-
-# plt.imshow(get)
-# plt.imshow(image2)
-# plt.show()
-# cv.waitKey(0)
