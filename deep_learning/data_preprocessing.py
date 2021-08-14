@@ -1,3 +1,5 @@
+# This file has to be run from within the deep_learning folder, such that the labeled data can be accessed via .\data\labeled\ 
+
 import os
 from pathlib import Path
 import numpy as np
@@ -17,32 +19,56 @@ def rot90(img,k,img_height,img_width):
     img_out = Image.fromarray(np.uint8(img_out),'RGB')
     return img_out
 
-path_labeled_data = r'.\deep_learning\data\labeled'
+path_labeled_data = r'.\data\labeled' # folder that contains labeled data. 
+# Structure must be: 
+#           - data/
+#               - labeled/
+#                   - condition1/
+#                       - DL_BG/
+#                       - DL1/
+#                       - DL2/
+#                       - DL3/
+#                   - condition2/
+#                       - DL_BG/
+#                       - DL1/
+#                       - DL2/
+#                       - DL3/
+#                   ...
+# 
+#                   - conditionN/
 
-outputfolder_train = r'.\deep_learning\data\train'
-outputfolder_train_merged = r'.\deep_learning\data\merged'
+outputfolder_train = r'.\data\train' 
+outputfolder_train_merged = r'.\data\train\merged'
+
+outputfolder_test = r'.\data\test'
+outputfolder_test_merged = r'.\data\test\merged'
+
 Path(os.path.join(outputfolder_train_merged,'DL1')).mkdir(parents=True, exist_ok=True)
 Path(os.path.join(outputfolder_train_merged,'DL2')).mkdir(parents=True, exist_ok=True)
 Path(os.path.join(outputfolder_train_merged,'DL3')).mkdir(parents=True, exist_ok=True)
 Path(os.path.join(outputfolder_train_merged,'DL_BG')).mkdir(parents=True, exist_ok=True)
 
-outputfolder_test = r'.\deep_learning\data\test'
-outputfolder_test_merged = r'.\deep_learning\data\test\merged'
 Path(outputfolder_test_merged).mkdir(parents=True, exist_ok=True)
 
-condition_folders = [os.path.join(path_labeled_data,x) for x in os.listdir(path_labeled_data)] 
-condition_folders = [os.path.join(path_labeled_data,x) for x in condition_folders if os.path.isdir(x)]
+condition_folders = [os.path.join(path_labeled_data,x) for x in os.listdir(path_labeled_data)]
 
 img_height = 360
 img_width = 640
 
+# Copy all images from the labeled folder to the train folder and rescale the images
+
+print('Copying the labeled data to train set:')
 for i_condition, condition_folder in enumerate(condition_folders):
     class_folders = [os.path.join(condition_folder,x) for x in os.listdir(condition_folder)] 
-    class_folders = [os.path.join(condition_folder,x) for x in class_folders if os.path.isdir(x)]
+
     print(os.path.basename(condition_folder))
+
+    # Go through each condition
     for class_folder in class_folders:
         print(os.path.basename(class_folder))
         imgs = [os.path.join(class_folder,x) for x in os.listdir(class_folder) if x.endswith('.png')]
+
+        # ... and each image
         for img_sample in imgs:
             img = keras.preprocessing.image.load_img(img_sample, target_size=(img_height, img_width))
             curr_name = img_sample.split('\\')[-1]
@@ -54,25 +80,33 @@ for i_condition, condition_folder in enumerate(condition_folders):
             img.save(out_name,format='PNG')
 
 
-# List all folders in train folder
+# The train folder should now contain all conditions + a folder called 'merged'
 conditions_train = [os.path.join(outputfolder_train,x) for x in os.listdir(outputfolder_train)] 
-conditions_train = [os.path.join(outputfolder_train,x) for x in conditions_train if os.path.isdir(x)]
+
+# exists_in_test contains all folders in the test set. By now there should only be the 'merged' folder
 exists_in_test = os.listdir(outputfolder_test)
+
 for condition_folder_train in conditions_train:
     print(os.path.basename(condition_folder_train) + ':')
+
+    # In case there are already processed folders in the test folder, skip those.
     if os.path.basename(condition_folder_train) in exists_in_test:
         print('skip')
         continue
+
+    # Also skip the 'merged' folder, since this is where the processed images land.
     if 'merged' in condition_folder_train:
         print('skip')
         continue
+
     # List all class folders in current condition
     class_folders = [os.path.join(condition_folder_train,x) for x in os.listdir(condition_folder_train)] 
-    class_folders = [os.path.join(condition_folder_train,x) for x in class_folders if os.path.isdir(x)]
+    
 
     for class_folder in class_folders:
         curr_class = os.path.basename(class_folder)
         print(curr_class)
+
         # List all images in current class
         imgs = [os.path.join(class_folder,x) for x in os.listdir(class_folder) if x.endswith('.png')]
         n_imgs = len(imgs)
@@ -108,8 +142,8 @@ for condition_folder_train in conditions_train:
             copyfile(img_test_sorted,img_test_merged)
         
         
-        # Perform augmentation on remaining training samples
-        print('Performing Data Augmentation...')
+        # Apply augmentation on remaining training samples
+        print('Applying Data Augmentation...')
         imgs = [os.path.join(class_folder,x) for x in os.listdir(class_folder) if x.endswith('.png')]
         for img_sample in imgs:
             img = keras.preprocessing.image.load_img(img_sample, target_size=(img_height, img_width))
@@ -132,3 +166,4 @@ for condition_folder_train in conditions_train:
             img_rot270.save(img_rot270_savename_merged,format='PNG')
         print('Done.')
 
+print('Preprocessing finished.')

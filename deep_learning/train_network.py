@@ -68,5 +68,5 @@ history = model.fit(
   epochs=epochs
 )
 
-model.save(r'.\deep_learning\models\rotordet_net_v4')
-np.save(r'.\deep_learning\models\my_history.npy',history.history)
+model.save(r'.\deep_learning\models\rotordet_net_vX')
+np.save(r'.\deep_learning\models\rotordet_net_vX\my_history.npy',history.history)

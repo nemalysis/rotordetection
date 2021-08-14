@@ -7,6 +7,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 def get_conditions_names2keys():
+    # names of the videos and their respective keys in the analysis
     conditions_names2keys = {
         'baseline': 'indoor',
         'daemmerung_leicht': 'dusk',
@@ -122,7 +123,6 @@ if __name__ == "main":
     test_datagen = ImageDataGenerator()
     test_dir = r'.\deep_learning\data\test'
     img_size = (img_height, img_width)
-
 
     conditions_names2keys = get_conditions_names2keys()
 
