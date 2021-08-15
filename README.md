@@ -5,7 +5,7 @@ simplistic rotordetection with zbar
 ## Deep Learning Algorithm
 
 ### Bot usage
-To use the Deep Learning algorithm on an RTSP livestream, use deep_learning_bot.py. Before usage, first change the `RTSP_url` variable to the RTSP URL of your livestream.
+To use the Deep Learning algorithm on an RTSP livestream, use deep_learning_bot.py. Before usage, first change the `RTSP_url` variable to the URL of your RTSP livestream.
 After that, you can run the script. The script will open a window showing the livestream, together with the prediction of the algorithm overlayed on top of the image.
 
 ### Training
