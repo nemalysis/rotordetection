@@ -3,7 +3,6 @@ from pyzbar import pyzbar
 import cv2
 import mss
 import numpy
-import PIL
 from rotation import get_rotation
 import os
 

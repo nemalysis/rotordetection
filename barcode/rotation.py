@@ -1,7 +1,6 @@
 
 import os
 import cv2 as cv
-import PIL
 import matplotlib.pyplot as plt
 from pyzbar import pyzbar as zbar
 from pprint import pprint as pp
