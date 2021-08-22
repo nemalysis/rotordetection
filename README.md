@@ -1,6 +1,15 @@
 # rotordetection
 simplistic rotordetection with zbar
 
+## Running the Code
+
+To install required libraries run 'python -m pip install requirements.txt'
+or if you have pip installed 'pip install requirements.txt'
+
+## Barcode Algorithm
+
+The Bot for analysing the RTSP livestream is in the ./barcode_bot.py script.
+To calculate accuracies, run the ./barcode_analysis.py script.
 
 ## Deep Learning Algorithm
 
